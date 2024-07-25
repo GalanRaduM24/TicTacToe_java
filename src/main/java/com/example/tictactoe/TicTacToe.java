@@ -19,10 +19,16 @@ import java.util.Random;
 
 public class TicTacToe extends Application {
 
+    // Variable to keep track of the current player (X or O)
     private char currentPlayer = 'X';
+
+    // 2D array to hold the buttons representing the Tic Tac Toe board
     private Button[][] buttons = new Button[3][3];
+
+    // Line to represent the winning combination
     private Line winningLine = new Line();
 
+    // Boolean to determine if the game is player vs computer
     private boolean vsComputer = false;
 
     public static void main(String[] args) {
@@ -31,23 +37,32 @@ public class TicTacToe extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+        // Create the root pane and the grid pane
         BorderPane root = new BorderPane();
         GridPane gridPane = createGridPane();
+
+        // Set the center of the root pane to the grid pane
         root.setCenter(gridPane);
+
+        // Set the left side of the root pane to the button pane
         root.setLeft(createButtonPane());
 
+        // Create the scene and set it on the primary stage
         Scene scene = new Scene(root, 400, 300);
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    // Method to create the grid pane (Tic Tac Toe board)
     private GridPane createGridPane() {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
+        // Create buttons and add them to the grid pane
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 Button button = createButton();
@@ -59,6 +74,7 @@ public class TicTacToe extends Application {
         return gridPane;
     }
 
+    // Method to create a single button
     private Button createButton() {
         Button button = new Button();
         button.setMinSize(100, 100);
@@ -66,6 +82,7 @@ public class TicTacToe extends Application {
         return button;
     }
 
+    // Method to create the pane with control buttons (1v1, vs Computer, Start Game)
     private VBox createButtonPane() {
         VBox buttonPane = new VBox(10);
         buttonPane.setAlignment(Pos.CENTER);
@@ -84,6 +101,7 @@ public class TicTacToe extends Application {
         return buttonPane;
     }
 
+    // Method to handle button clicks on the Tic Tac Toe board
     private void handleButtonClick(Button button) {
         if (button.getText().isEmpty()) {
             button.setText(String.valueOf(currentPlayer));
@@ -100,24 +118,26 @@ public class TicTacToe extends Application {
         }
     }
 
+    // Method to start a player vs player game
     private void startPlayerVsPlayerGame() {
         resetGame();
         vsComputer = false;
         showMessage("1v1 Game Selected");
     }
 
+    // Method to start a game against the computer
     private void startVsComputerGame() {
         resetGame();
         vsComputer = true;
         showMessage("Vs Computer Selected");
-
-        // makeComputerMove();
     }
 
+    // Method to switch the current player
     private void switchPlayer() {
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
     }
 
+    // Method to check if there's a winner
     private boolean checkForWinner() {
         if (checkRows() || checkColumns() || checkDiagonals()) {
             return true;
@@ -125,6 +145,7 @@ public class TicTacToe extends Application {
         return false;
     }
 
+    // Method to check if there's a winning row
     private boolean checkRows() {
         for (int row = 0; row < 3; row++) {
             if (checkLine(buttons[row][0], buttons[row][1], buttons[row][2])) {
@@ -135,6 +156,7 @@ public class TicTacToe extends Application {
         return false;
     }
 
+    // Method to check if there's a winning column
     private boolean checkColumns() {
         for (int col = 0; col < 3; col++) {
             if (checkLine(buttons[0][col], buttons[1][col], buttons[2][col])) {
@@ -145,6 +167,7 @@ public class TicTacToe extends Application {
         return false;
     }
 
+    // Method to check if there's a winning diagonal
     private boolean checkDiagonals() {
         if (checkLine(buttons[0][0], buttons[1][1], buttons[2][2])) {
             drawWinningLine(buttons[0][0], buttons[2][2]);
@@ -156,10 +179,12 @@ public class TicTacToe extends Application {
         return false;
     }
 
+    // Method to check if three buttons form a winning line
     private boolean checkLine(Button b1, Button b2, Button b3) {
         return !b1.getText().isEmpty() && b1.getText().equals(b2.getText()) && b2.getText().equals(b3.getText());
     }
 
+    // Method to draw the winning line on the board
     private void drawWinningLine(Button startButton, Button endButton) {
         // Check if the line is already added
         if (!((Pane) startButton.getScene().getRoot()).getChildren().contains(winningLine)) {
@@ -191,7 +216,7 @@ public class TicTacToe extends Application {
         }
     }
 
-
+    // Method to check if the board is full (draw condition)
     private boolean isBoardFull() {
         for (Button[] row : buttons) {
             for (Button button : row) {
@@ -203,6 +228,7 @@ public class TicTacToe extends Application {
         return true;
     }
 
+    // Method to announce the winner
     private void announceWinner() {
         System.out.println("Player " + currentPlayer + " wins!");
 
@@ -210,13 +236,14 @@ public class TicTacToe extends Application {
         resetGame();
     }
 
-
+    // Method to announce a draw
     private void announceDraw() {
         System.out.println("It's a draw!");
         showGameOverAlert("It's a draw!");
         resetGame();
     }
 
+    // Method to show a game over alert
     private void showGameOverAlert(String message) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Game Over");
@@ -225,6 +252,7 @@ public class TicTacToe extends Application {
         alert.showAndWait();
     }
 
+    // Method to reset the game board
     private void resetGame() {
         for (Button[] row : buttons) {
             for (Button button : row) {
@@ -244,6 +272,7 @@ public class TicTacToe extends Application {
         currentPlayer = 'X';
     }
 
+    // Method to show a message dialog
     private void showMessage(String message) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Game Mode");
@@ -252,6 +281,7 @@ public class TicTacToe extends Application {
         alert.showAndWait();
     }
 
+    // Method to make the computer's move using the minimax algorithm
     private void makeComputerMove() {
         int[] bestMove = minimax(2, 'O');
 
@@ -266,6 +296,7 @@ public class TicTacToe extends Application {
         }
     }
 
+    // Minimax algorithm to find the best move for the computer
     private int[] minimax(int depth, char player) {
         int[] bestMove = new int[]{ -1, -1, (player == 'O') ? Integer.MIN_VALUE : Integer.MAX_VALUE };
 
