@@ -33,3 +33,7 @@ A simple and interactive Tic Tac Toe game built using JavaFX. The game supports 
   - resetGame(): Resets the game board for a new game.
   - makeComputerMove(): Makes a move for the computer using the Minimax algorithm.
   - minimax(int depth, char player): Minimax algorithm to find the best move for the computer.
+
+## Demonstration
+![image](Images/img.png)
+![image](Images/img_1.png)
